@@ -1,0 +1,17 @@
+version: '2'
+services:
+    docker-cron:
+      image: pschatzmann/docker-cron
+      container_name: docker-cron
+      volumes:
+       - /var/run/docker.sock:/var/run/docker.sock
+       - /backup:/backup
+      labels:
+        - job.schedule=0 * * * *
+        - job.postgres-backup.scenario=containerLabelsWithSystem
+        - job.postgres-backup.condition=image.startsWith('postgres')
+        - job.postgres-backup.command.1=docker exec -t {name} pg_dumpall -c -U postgres -f /var/lib/postgresql/data/dump-{name}.sql
+        - job.postgres-backup.command.2=docker cp {name}:/var/lib/postgresql/data/dump-{name}.sql /backup 
+
+      restart: always
+
