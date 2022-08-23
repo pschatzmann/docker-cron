@@ -1,5 +1,5 @@
 ## Overview
-We provide an lean implementation of a job scheduling functionality where the jobs can be easily defined with docker labels.It is possible to set up single jobs which just run on the container where the labels are defined or central jobs which run against all containers.
+We provide a lean implementation of a job scheduling functionality where the jobs can be easily defined with docker labels. It is possible to set up single jobs which just run on the container where the labels are defined or central jobs which run against all containers.
 
 Docker-cron is based on Alpine and it includes a docker client and the most important backup tools (tar rsync  rdiff-backup borgbackup)
 
@@ -15,11 +15,11 @@ and we will pick up all scheduling information which is defined in any of your c
     version: '2'
       services:
         docker-cron:
-        image: pschatzmann/docker-cron
-        container_name: docker-cron
-        volumes:
+          image: pschatzmann/docker-cron
+          container_name: docker-cron
+          volumes:
             - /var/run/docker.sock:/var/run/docker.sock
-        restart: always
+          restart: always
 
 
 
@@ -38,8 +38,9 @@ The job information is defined in the labels of the containers. Only the schedul
 #  Example
 
 The following example is printing the name of the container and the volumes every minute to the console
-            - job.echo.schedule=* * * * *
-            - job.echo.command=echo name={name} id={id}
+
+    - job.echo.schedule=* * * * *
+    - job.echo.command=echo name={name} id={id}
 
 # Schedule (Cron Expression) 
 A UNIX crontab-like pattern is a string split in five space separated parts. Each part is intended as:
@@ -61,7 +62,7 @@ It is possible to use the scripting engine instead of this default templating en
 
 # Variables
 All container labels are available as variables. In addition we support the following additional variables
- -  name: container name
+ - name: container name
  - id: container id
  - host: host of the current container
  - docker-cron-host: host of the container which is running docker-cron
@@ -124,7 +125,7 @@ All volumes of all containers are saved as tar files to the /backup directory on
         restart: always
 
 # Backup Postgres
-Every day at midnight, we dumb all postgres containers and copy the dump into the /backup directory of the host. Then we user the docker cp to copy the file out of the container to the host
+Every day at midnight, we dump all postgres containers and copy the dump into the /backup directory of the host. Then we use `docker cp` to copy the file out of the container to the host
 
     version: '2'
       services:
@@ -143,7 +144,7 @@ Every day at midnight, we dumb all postgres containers and copy the dump into th
 
 
 # Combined Example
-And here is a combined example that backs up the containers,  all volumes of all containers and the database containers
+And here is a combined example that backs up the containers, all volumes of all containers and the database containers
 
     version: '2'
     services:
